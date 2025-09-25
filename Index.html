@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINANCE MNU PEKANBARU PROGRAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Soft blue-gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #334155;
+            padding: 1rem;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        .title {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        .menu-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2e8f0; /* Soft gray background for buttons */
+            color: #475569;
+            font-weight: 600;
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .menu-item:hover {
+            background-color: #94a3b8; /* Darker on hover */
+            color: #f1f5f9;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 2rem;
+            background-color: #f1f5f9;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+        .clock {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border: 4px solid #64748b;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background-color: #64748b;
+            border-radius: 9999px;
+        }
+        .hour-hand {
+            width: 5px;
+            height: 40px;
+        }
+        .minute-hand {
+            width: 4px;
+            height: 55px;
+        }
+        .second-hand {
+            width: 2px;
+            height: 65px;
+            background-color: #ef4444; /* Red for the second hand */
+        }
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #1e293b;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .calendar-container {
+            background-color: #f1f5f9;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .day-number {
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #475569;
+        }
+        .today {
+            background-color: #3b82f6; /* Tailwind's blue-500 */
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-4xl title">FINANCE MNU PEKANBARU PROGRAM</h1>
+        
+        <div class="menu-grid">
+            <a href="https://kososon.github.io/Tagihan/" class="menu-item">
+                Tagihan Customer
+            </a>
+            <a href="https://kososon.github.io/kontra_bon/" class="menu-item">
+                Kontra Bon
+            </a>
+        </div>
+
+        <!-- Real-time Analog Clock -->
+        <div class="clock-container">
+            <h3 class="text-lg font-semibold mb-2">Jam Saat Ini</h3>
+            <div class="clock">
+                <div id="hour-hand" class="hand hour-hand"></div>
+                <div id="minute-hand" class="hand minute-hand"></div>
+                <div id="second-hand" class="hand second-hand"></div>
+                <div class="center-dot"></div>
+            </div>
+        </div>
+
+        <!-- Monthly Calendar -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div id="month-year" class="text-lg"></div>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+        </div>
+
+        <p class="footer">Design by Wilson Susanto</p>
+    </div>
+
+    <script>
+        // Javascript untuk jam analog
+        const hourHand = document.getElementById('hour-hand');
+        const minuteHand = document.getElementById('minute-hand');
+        const secondHand = document.getElementById('second-hand');
+
+        function updateClock() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            const secondsDeg = (seconds / 60) * 360;
+            const minutesDeg = ((minutes + seconds / 60) / 60) * 360;
+            const hoursDeg = ((hours + minutes / 60) / 12) * 360;
+
+            secondHand.style.transform = `rotate(${secondsDeg}deg)`;
+            minuteHand.style.transform = `rotate(${minutesDeg}deg)`;
+            hourHand.style.transform = `rotate(${hoursDeg}deg)`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Javascript untuk kalender
+        function generateCalendar() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const today = date.getDate();
+
+            const monthYearText = document.getElementById('month-year');
+            const calendarGrid = document.getElementById('calendar-grid');
+
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const dayNames = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+
+            monthYearText.textContent = `${monthNames[month]} ${year}`;
+
+            calendarGrid.innerHTML = '';
+            dayNames.forEach(day => {
+                const dayNameElement = document.createElement('div');
+                dayNameElement.className = 'day-name';
+                dayNameElement.textContent = day;
+                calendarGrid.appendChild(dayNameElement);
+            });
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarGrid.appendChild(document.createElement('div'));
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayNumberElement = document.createElement('div');
+                dayNumberElement.className = 'day-number';
+                dayNumberElement.textContent = i;
+                if (i === today) {
+                    dayNumberElement.classList.add('today');
+                }
+                calendarGrid.appendChild(dayNumberElement);
+            }
+        }
+
+        generateCalendar();
+    </script>
+</body>
+</html>
+
